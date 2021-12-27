@@ -26,6 +26,7 @@ import org.apache.camel.Route;
 import org.apache.camel.RouteTemplateContext;
 import org.apache.camel.TypeConverter;
 import org.apache.camel.catalog.RuntimeCamelCatalog;
+import org.apache.camel.console.DevConsoleRegistry;
 import org.apache.camel.console.DevConsoleResolver;
 import org.apache.camel.health.HealthCheckRegistry;
 import org.apache.camel.health.HealthCheckResolver;
@@ -129,6 +130,17 @@ public class SimpleCamelContext extends AbstractCamelContext {
                 getBootstrapFactoryFinder(),
                 HealthCheckRegistry.FACTORY,
                 HealthCheckRegistry.class);
+
+        return result.orElse(null);
+    }
+
+    @Override
+    protected DevConsoleRegistry createDevConsoleRegistry() {
+        Optional<DevConsoleRegistry> result = ResolverHelper.resolveService(
+                getCamelContextReference(),
+                getBootstrapFactoryFinder(),
+                DevConsoleRegistry.FACTORY,
+                DevConsoleRegistry.class);
 
         return result.orElse(null);
     }

@@ -80,6 +80,7 @@ import org.apache.camel.TypeConverter;
 import org.apache.camel.VetoCamelContextStartException;
 import org.apache.camel.api.management.JmxSystemPropertyKeys;
 import org.apache.camel.catalog.RuntimeCamelCatalog;
+import org.apache.camel.console.DevConsoleRegistry;
 import org.apache.camel.console.DevConsoleResolver;
 import org.apache.camel.health.HealthCheckRegistry;
 import org.apache.camel.health.HealthCheckResolver;
@@ -2687,6 +2688,19 @@ public abstract class AbstractCamelContext extends BaseService
             startupStepRecorder.endStep(step4);
         }
 
+        // setup dev-console registry as its needed this early phase for 3rd party to register custom consoles
+        DevConsoleRegistry dcr = getExtension(DevConsoleRegistry.class);
+        if (dcr == null) {
+            StartupStep step5 = startupStepRecorder.beginStep(CamelContext.class, null, "Setup DevConsoleRegistry");
+            dcr = createDevConsoleRegistry();
+            if (dcr != null) {
+                // install dev-console registry if it was discovered from classpath (camel-console)
+                dcr.setCamelContext(this);
+                setExtension(DevConsoleRegistry.class, dcr);
+            }
+            startupStepRecorder.endStep(step5);
+        }
+
         // Call all registered trackers with this context
         // Note, this may use a partially constructed object
         CamelContextTracker.notifyContextCreated(this);
@@ -5038,6 +5052,8 @@ public abstract class AbstractCamelContext extends BaseService
     protected abstract ProcessorExchangeFactory createProcessorExchangeFactory();
 
     protected abstract HealthCheckRegistry createHealthCheckRegistry();
+
+    protected abstract DevConsoleRegistry createDevConsoleRegistry();
 
     protected abstract ReactiveExecutor createReactiveExecutor();
 
