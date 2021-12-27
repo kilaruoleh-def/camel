@@ -61,6 +61,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": target.setDeferServiceFactory(property(camelContext, org.apache.camel.spi.DeferServiceFactory.class, value)); return true;
         case "delayer":
         case "Delayer": target.setDelayer(property(camelContext, java.lang.Long.class, value)); return true;
+        case "devconsole":
+        case "DevConsole": target.setDevConsole(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "devconsoleresolver":
         case "DevConsoleResolver": target.setDevConsoleResolver(property(camelContext, org.apache.camel.console.DevConsoleResolver.class, value)); return true;
         case "dumproutes":
@@ -95,8 +97,6 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": target.setLanguageResolver(property(camelContext, org.apache.camel.spi.LanguageResolver.class, value)); return true;
         case "lightweight":
         case "Lightweight": target.setLightweight(property(camelContext, boolean.class, value)); return true;
-        case "loaddevconsoles":
-        case "LoadDevConsoles": target.setLoadDevConsoles(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "loadhealthchecks":
         case "LoadHealthChecks": target.setLoadHealthChecks(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "loadtypeconverters":
@@ -248,6 +248,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": return org.apache.camel.spi.DeferServiceFactory.class;
         case "delayer":
         case "Delayer": return java.lang.Long.class;
+        case "devconsole":
+        case "DevConsole": return java.lang.Boolean.class;
         case "devconsoleresolver":
         case "DevConsoleResolver": return org.apache.camel.console.DevConsoleResolver.class;
         case "dumproutes":
@@ -282,8 +284,6 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": return org.apache.camel.spi.LanguageResolver.class;
         case "lightweight":
         case "Lightweight": return boolean.class;
-        case "loaddevconsoles":
-        case "LoadDevConsoles": return java.lang.Boolean.class;
         case "loadhealthchecks":
         case "LoadHealthChecks": return java.lang.Boolean.class;
         case "loadtypeconverters":
@@ -436,6 +436,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": return target.getDeferServiceFactory();
         case "delayer":
         case "Delayer": return target.getDelayer();
+        case "devconsole":
+        case "DevConsole": return target.isDevConsole();
         case "devconsoleresolver":
         case "DevConsoleResolver": return target.getDevConsoleResolver();
         case "dumproutes":
@@ -470,8 +472,6 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": return target.getLanguageResolver();
         case "lightweight":
         case "Lightweight": return target.isLightweight();
-        case "loaddevconsoles":
-        case "LoadDevConsoles": return target.isLoadDevConsoles();
         case "loadhealthchecks":
         case "LoadHealthChecks": return target.isLoadHealthChecks();
         case "loadtypeconverters":

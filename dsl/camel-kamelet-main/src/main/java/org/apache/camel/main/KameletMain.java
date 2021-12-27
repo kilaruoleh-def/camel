@@ -173,7 +173,7 @@ public class KameletMain extends MainCommandLineSupport {
         }
         if (console) {
             // turn on developer console
-            answer.setLoadDevConsoles(true);
+            configure().withDevConsoleEnabled(true);
             VertxHttpServer.registerConsole(answer);
         }
 

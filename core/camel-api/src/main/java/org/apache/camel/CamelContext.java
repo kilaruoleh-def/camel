@@ -1187,14 +1187,18 @@ public interface CamelContext extends CamelContextLifecycle, RuntimeConfiguratio
     void setLoadHealthChecks(Boolean loadHealthChecks);
 
     /**
-     * Whether to load custom dev consoles by scanning classpath.
+     * Whether to enable developer console (requires camel-console on classpath).
+     *
+     * The developer console is only for assisting during development. This is NOT for production usage.
      */
-    Boolean isLoadDevConsoles();
+    Boolean isDevConsole();
 
     /**
-     * Whether to load custom dev consoles by scanning classpath.
+     * Whether to enable developer console (requires camel-console on classpath)
+     *
+     * The developer console is only for assisting during development. This is NOT for production usage.
      */
-    void setLoadDevConsoles(Boolean loadDevConsoles);
+    void setDevConsole(Boolean loadDevConsoles);
 
     /**
      * Whether or not type converter statistics is enabled.
