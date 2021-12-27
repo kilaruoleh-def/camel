@@ -1,0 +1,163 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.camel.impl.console;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.CamelContextAware;
+import org.apache.camel.DeferredContextBinding;
+import org.apache.camel.ExtendedCamelContext;
+import org.apache.camel.console.DevConsole;
+import org.apache.camel.console.DevConsoleRegistry;
+import org.apache.camel.console.DevConsoleResolver;
+import org.apache.camel.support.service.ServiceSupport;
+import org.apache.camel.util.StopWatch;
+import org.apache.camel.util.TimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Stream;
+
+/**
+ * Default {@link org.apache.camel.console.DevConsoleRegistry}.
+ */
+@org.apache.camel.spi.annotations.DevConsole(DevConsoleRegistry.NAME)
+@DeferredContextBinding
+public class DefaultDevConsoleRegistry extends ServiceSupport implements DevConsoleRegistry {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultDevConsoleRegistry.class);
+
+    private String id = "camel-console";
+    private CamelContext camelContext;
+    private final Set<DevConsole> consoles;
+    private boolean enabled = true;
+    private volatile boolean loadDevConsolesDone;
+
+    public DefaultDevConsoleRegistry() {
+        this(null);
+    }
+
+    public DefaultDevConsoleRegistry(CamelContext camelContext) {
+        this.consoles = new CopyOnWriteArraySet<>();
+        setCamelContext(camelContext);
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public CamelContext getCamelContext() {
+        return camelContext;
+    }
+
+    @Override
+    public void setCamelContext(CamelContext camelContext) {
+        this.camelContext = camelContext;
+    }
+
+    @Override
+    protected void doInit() throws Exception {
+        super.doInit();
+
+        for (DevConsole console : consoles) {
+            CamelContextAware.trySetCamelContext(console, camelContext);
+        }
+    }
+
+    @Override
+    public DevConsole resolveById(String id) {
+        DevConsole answer = consoles.stream().filter(h -> h.getId().equals(id)).findFirst()
+                .orElse(camelContext.getRegistry().findByTypeWithName(DevConsole.class).get(id));
+        if (answer == null) {
+            DevConsoleResolver resolver = camelContext.adapt(ExtendedCamelContext.class).getDevConsoleResolver();
+            answer = resolver.resolveDevConsole(id);
+        }
+
+        return answer;
+    }
+
+    @Override
+    public boolean register(DevConsole console) {
+        boolean result;
+        // do we have this already
+        if (getConsole(console.getId()).isPresent()) {
+            return false;
+        }
+        result = consoles.add(console);
+        if (result) {
+            CamelContextAware.trySetCamelContext(console, camelContext);
+            LOG.debug("DevConsole with id {} successfully registered", console.getId());
+        }
+        return result;
+    }
+
+    @Override
+    public boolean unregister(DevConsole console) {
+        boolean result;
+
+        result = consoles.remove(console);
+        if (result) {
+            LOG.debug("DevConsole with id {} successfully un-registered", console.getId());
+        }
+        return result;
+    }
+
+    @Override
+    public Stream<DevConsole> stream() {
+        if (enabled) {
+            return consoles.stream();
+        }
+        return Stream.empty();
+    }
+
+    @Override
+    public void loadDevConsoles() {
+        StopWatch watch = new StopWatch();
+
+        if (!loadDevConsolesDone) {
+            loadDevConsolesDone = true;
+
+            DefaultDevConsolesLoader loader = new DefaultDevConsolesLoader(camelContext);
+            Collection<DevConsole> col = loader.loadDevConsoles();
+
+            // report how many health checks we have loaded
+            if (col.size() > 0) {
+                String time = TimeUtils.printDuration(watch.taken());
+                LOG.info("Dev consoles (scanned: {}) loaded in {}", col.size(), time);
+            }
+        }
+    }
+}
