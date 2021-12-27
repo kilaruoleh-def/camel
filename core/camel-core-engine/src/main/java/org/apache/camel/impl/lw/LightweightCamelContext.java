@@ -901,6 +901,16 @@ public class LightweightCamelContext implements ExtendedCamelContext, CatalogCam
     }
 
     @Override
+    public Boolean isLoadDevConsoles() {
+        return delegate.isLoadDevConsoles();
+    }
+
+    @Override
+    public void setLoadDevConsoles(Boolean loadDevConsoles) {
+        delegate.setLoadDevConsoles(loadDevConsoles);
+    }
+
+    @Override
     public Boolean isDumpRoutes() {
         return delegate.isDumpRoutes();
     }

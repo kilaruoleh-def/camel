@@ -153,8 +153,11 @@ public class DefaultDevConsoleRegistry extends ServiceSupport implements DevCons
             DefaultDevConsolesLoader loader = new DefaultDevConsolesLoader(camelContext);
             Collection<DevConsole> col = loader.loadDevConsoles();
 
-            // report how many health checks we have loaded
             if (col.size() > 0) {
+                // register the loaded consoles
+                for (DevConsole console : col) {
+                    register(console);
+                }
                 String time = TimeUtils.printDuration(watch.taken());
                 LOG.info("Dev consoles (scanned: {}) loaded in {}", col.size(), time);
             }

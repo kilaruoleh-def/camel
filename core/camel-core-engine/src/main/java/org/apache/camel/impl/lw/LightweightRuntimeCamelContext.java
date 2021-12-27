@@ -1201,6 +1201,16 @@ public class LightweightRuntimeCamelContext implements ExtendedCamelContext, Cat
     }
 
     @Override
+    public Boolean isLoadDevConsoles() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setLoadDevConsoles(Boolean loadDevConsoles) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setLoadHealthChecks(Boolean loadHealthChecks) {
         throw new UnsupportedOperationException();
     }

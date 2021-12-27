@@ -82,6 +82,11 @@ public class DefaultDevConsolesLoader {
         if (loc == null) {
             return false;
         }
+        if (loc.endsWith("default-registry")) {
+            // this is the registry so should be skipped
+            return false;
+        }
+
         return true;
     }
 

@@ -263,6 +263,7 @@ public abstract class AbstractCamelContext extends BaseService
     private Boolean disableJMX = Boolean.FALSE;
     private Boolean loadTypeConverters = Boolean.FALSE;
     private Boolean loadHealthChecks = Boolean.FALSE;
+    private Boolean loadDevConsoles = Boolean.FALSE;
     private Boolean typeConverterStatisticsEnabled = Boolean.FALSE;
     private Boolean dumpRoutes = Boolean.FALSE;
     private Boolean useMDCLogging = Boolean.FALSE;
@@ -2768,6 +2769,15 @@ public abstract class AbstractCamelContext extends BaseService
             }
             startupStepRecorder.endStep(step3);
         }
+        // ensure additional dev consoles is loaded
+        if (loadDevConsoles) {
+            StartupStep step4 = startupStepRecorder.beginStep(CamelContext.class, null, "Scan DevConsoles");
+            DevConsoleRegistry dcr = getExtension(DevConsoleRegistry.class);
+            if (dcr != null) {
+                dcr.loadDevConsoles();
+            }
+            startupStepRecorder.endStep(step4);
+        }
 
         // custom properties may use property placeholders so resolve those
         // early on
@@ -4216,6 +4226,15 @@ public abstract class AbstractCamelContext extends BaseService
     @Override
     public void setLoadHealthChecks(Boolean loadHealthChecks) {
         this.loadHealthChecks = loadHealthChecks;
+    }
+
+    public Boolean isLoadDevConsoles() {
+        return loadDevConsoles != null && loadDevConsoles;
+    }
+
+    @Override
+    public void setLoadDevConsoles(Boolean loadDevConsoles) {
+        this.loadDevConsoles = loadDevConsoles;
     }
 
     @Override

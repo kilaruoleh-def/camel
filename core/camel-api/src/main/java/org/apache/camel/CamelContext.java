@@ -1187,6 +1187,16 @@ public interface CamelContext extends CamelContextLifecycle, RuntimeConfiguratio
     void setLoadHealthChecks(Boolean loadHealthChecks);
 
     /**
+     * Whether to load custom dev consoles by scanning classpath.
+     */
+    Boolean isLoadDevConsoles();
+
+    /**
+     * Whether to load custom dev consoles by scanning classpath.
+     */
+    void setLoadDevConsoles(Boolean loadDevConsoles);
+
+    /**
      * Whether or not type converter statistics is enabled.
      * <p/>
      * By default the type converter utilization statistics is disabled. <b>Notice:</b> If enabled then there is a

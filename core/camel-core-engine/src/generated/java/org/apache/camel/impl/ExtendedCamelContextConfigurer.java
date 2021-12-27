@@ -95,6 +95,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": target.setLanguageResolver(property(camelContext, org.apache.camel.spi.LanguageResolver.class, value)); return true;
         case "lightweight":
         case "Lightweight": target.setLightweight(property(camelContext, boolean.class, value)); return true;
+        case "loaddevconsoles":
+        case "LoadDevConsoles": target.setLoadDevConsoles(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "loadhealthchecks":
         case "LoadHealthChecks": target.setLoadHealthChecks(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "loadtypeconverters":
@@ -280,6 +282,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": return org.apache.camel.spi.LanguageResolver.class;
         case "lightweight":
         case "Lightweight": return boolean.class;
+        case "loaddevconsoles":
+        case "LoadDevConsoles": return java.lang.Boolean.class;
         case "loadhealthchecks":
         case "LoadHealthChecks": return java.lang.Boolean.class;
         case "loadtypeconverters":
@@ -466,6 +470,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "LanguageResolver": return target.getLanguageResolver();
         case "lightweight":
         case "Lightweight": return target.isLightweight();
+        case "loaddevconsoles":
+        case "LoadDevConsoles": return target.isLoadDevConsoles();
         case "loadhealthchecks":
         case "LoadHealthChecks": return target.isLoadHealthChecks();
         case "loadtypeconverters":

@@ -40,7 +40,7 @@ public interface DevConsoleRegistry extends CamelContextAware, StaticService, Id
     /**
      * Service factory key.
      */
-    String FACTORY = "console/" + NAME;
+    String FACTORY = "dev-console/" + NAME;
 
     /**
      * Whether dev console is enabled globally
