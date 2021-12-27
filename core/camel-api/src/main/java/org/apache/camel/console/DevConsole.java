@@ -33,14 +33,14 @@ public interface DevConsole {
     }
 
     /**
-     * The ID of this console.
-     */
-    String getId();
-
-    /**
      * The group of this console.
      */
     String getGroup();
+
+    /**
+     * The ID of this console.
+     */
+    String getId();
 
     /**
      * Whether this console supports the given media type.

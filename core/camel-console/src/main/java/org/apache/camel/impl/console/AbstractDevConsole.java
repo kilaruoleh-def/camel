@@ -29,13 +29,13 @@ public abstract class AbstractDevConsole implements DevConsole, CamelContextAwar
 
     private CamelContext camelContext;
     private final Object lock;
-    private final String id;
     private final String group;
+    private final String id;
 
-    public AbstractDevConsole(String id, String group) {
+    public AbstractDevConsole(String group, String id) {
         this.lock = new Object();
-        this.id = id;
         this.group = group;
+        this.id = id;
     }
 
     @Override
@@ -54,13 +54,13 @@ public abstract class AbstractDevConsole implements DevConsole, CamelContextAwar
     }
 
     @Override
-    public String getId() {
-        return id;
+    public String getGroup() {
+        return group;
     }
 
     @Override
-    public String getGroup() {
-        return group;
+    public String getId() {
+        return id;
     }
 
     @Override
