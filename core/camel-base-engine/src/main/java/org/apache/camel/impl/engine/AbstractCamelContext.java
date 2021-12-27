@@ -4380,7 +4380,7 @@ public abstract class AbstractCamelContext extends BaseService
     }
 
     public void setDevConsoleResolver(DevConsoleResolver devConsoleResolver) {
-        this.devConsoleResolver = devConsoleResolver;
+        this.devConsoleResolver = doAddService(devConsoleResolver);
     }
 
     @Override

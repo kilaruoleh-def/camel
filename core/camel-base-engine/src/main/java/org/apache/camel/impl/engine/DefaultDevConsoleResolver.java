@@ -67,7 +67,8 @@ public class DefaultDevConsoleResolver implements DevConsoleResolver, CamelConte
 
         if (type != null) {
             if (DevConsole.class.isAssignableFrom(type)) {
-                return (DevConsole) camelContext.getInjector().newInstance(type, false);
+                answer = (DevConsole) camelContext.getInjector().newInstance(type, false);
+                CamelContextAware.trySetCamelContext(answer, camelContext);
             } else {
                 throw new IllegalArgumentException(
                         "Resolving dev-console: " + id + " detected type conflict: Not a DevConsole implementation. Found: "
@@ -75,7 +76,7 @@ public class DefaultDevConsoleResolver implements DevConsoleResolver, CamelConte
             }
         }
 
-        return null;
+        return answer;
     }
 
     protected Class<?> findDevConsole(String name, CamelContext context) throws Exception {
