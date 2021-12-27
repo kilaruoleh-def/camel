@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.impl.health;
+package org.apache.camel.impl.console;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ExtendedCamelContext;
-import org.apache.camel.health.HealthCheck;
-import org.apache.camel.health.HealthCheckResolver;
+import org.apache.camel.console.DevConsole;
+import org.apache.camel.console.DevConsoleResolver;
 import org.apache.camel.spi.PackageScanResourceResolver;
 import org.apache.camel.spi.Resource;
 import org.apache.camel.util.StringHelper;
@@ -30,47 +30,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * To load custom {@link HealthCheck} by classpath scanning.
+ * To load custom {@link org.apache.camel.console.DevConsole} by classpath scanning.
  */
-public class DefaultHealthChecksLoader {
+public class DefaultDevConsolesLoader {
 
-    public static final String META_INF_SERVICES = "META-INF/services/org/apache/camel/health-check";
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultHealthChecksLoader.class);
+    public static final String META_INF_SERVICES = "META-INF/services/org/apache/camel/dev-console";
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultDevConsolesLoader.class);
 
     protected final CamelContext camelContext;
     protected final PackageScanResourceResolver resolver;
-    protected final HealthCheckResolver healthCheckResolver;
+    protected final DevConsoleResolver devConsoleResolver;
 
-    public DefaultHealthChecksLoader(CamelContext camelContext) {
+    public DefaultDevConsolesLoader(CamelContext camelContext) {
         this.camelContext = camelContext;
         this.resolver = camelContext.adapt(ExtendedCamelContext.class).getPackageScanResourceResolver();
-        this.healthCheckResolver = camelContext.adapt(ExtendedCamelContext.class).getHealthCheckResolver();
+        this.devConsoleResolver = camelContext.adapt(ExtendedCamelContext.class).getDevConsoleResolver();
     }
 
-    public Collection<HealthCheck> loadHealthChecks() {
-        Collection<HealthCheck> answer = new ArrayList<>();
+    public Collection<DevConsole> loadDevConsoles() {
+        Collection<DevConsole> answer = new ArrayList<>();
 
-        LOG.trace("Searching for {} health checks", META_INF_SERVICES);
+        LOG.trace("Searching for {} dev consoles", META_INF_SERVICES);
 
         try {
-            Collection<Resource> resources = resolver.findResources(META_INF_SERVICES + "/*-check");
+            Collection<Resource> resources = resolver.findResources(META_INF_SERVICES + "/*");
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Discovered {} health checks from classpath scanning", resources.size());
+                LOG.debug("Discovered {} dev consoles from classpath scanning", resources.size());
             }
             for (Resource resource : resources) {
                 LOG.trace("Resource: {}", resource);
                 if (acceptResource(resource)) {
                     String id = extractId(resource);
-                    LOG.trace("Loading HealthCheck: {}", id);
-                    HealthCheck hc = healthCheckResolver.resolveHealthCheck(id);
-                    if (hc != null) {
-                        LOG.debug("Loaded HealthCheck: {}/{}", hc.getGroup(), hc.getId());
-                        answer.add(hc);
+                    LOG.trace("Loading DevConsole: {}", id);
+                    DevConsole dc = devConsoleResolver.resolveDevConsole(id);
+                    if (dc != null) {
+                        LOG.debug("Loaded DevConsole: {}/{}", dc.getGroup(), dc.getId());
+                        answer.add(dc);
                     }
                 }
             }
         } catch (Exception e) {
-            LOG.warn("Error during scanning for custom health-checks on classpath due to: " + e.getMessage()
+            LOG.warn("Error during scanning for custom dev-consoles on classpath due to: " + e.getMessage()
                      + ". This exception is ignored.");
         }
 
@@ -82,23 +82,12 @@ public class DefaultHealthChecksLoader {
         if (loc == null) {
             return false;
         }
-
-        // this is an out of the box health-check
-        if (loc.endsWith("context-check")) {
-            return false;
-        }
-
         return true;
     }
 
     protected String extractId(Resource resource) {
         String loc = resource.getLocation();
-        loc = StringHelper.after(loc, META_INF_SERVICES + "/");
-        // remove -check suffix
-        if (loc != null && loc.endsWith("-check")) {
-            loc = loc.substring(0, loc.length() - 6);
-        }
-        return loc;
+        return StringHelper.after(loc, META_INF_SERVICES + "/");
     }
 
 }
