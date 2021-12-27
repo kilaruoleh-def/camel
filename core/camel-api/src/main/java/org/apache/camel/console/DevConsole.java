@@ -25,6 +25,7 @@ import java.util.Map;
 public interface DevConsole {
 
     String CONSOLE_ID = "console.id";
+    String CONSOLE_GROUP = "console.group";
 
     enum MediaType {
         TEXT,
@@ -35,6 +36,11 @@ public interface DevConsole {
      * The ID of this console.
      */
     String getId();
+
+    /**
+     * The group of this console.
+     */
+    String getGroup();
 
     /**
      * Whether this console supports the given media type.
