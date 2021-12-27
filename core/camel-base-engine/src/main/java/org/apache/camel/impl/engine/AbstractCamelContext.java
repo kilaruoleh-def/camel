@@ -80,6 +80,7 @@ import org.apache.camel.TypeConverter;
 import org.apache.camel.VetoCamelContextStartException;
 import org.apache.camel.api.management.JmxSystemPropertyKeys;
 import org.apache.camel.catalog.RuntimeCamelCatalog;
+import org.apache.camel.console.DevConsoleResolver;
 import org.apache.camel.health.HealthCheckRegistry;
 import org.apache.camel.health.HealthCheckResolver;
 import org.apache.camel.spi.AnnotationBasedProcessorFactory;
@@ -294,6 +295,7 @@ public abstract class AbstractCamelContext extends BaseService
     private volatile UriFactoryResolver uriFactoryResolver;
     private volatile DataFormatResolver dataFormatResolver;
     private volatile HealthCheckResolver healthCheckResolver;
+    private volatile DevConsoleResolver devConsoleResolver;
     private volatile ManagementStrategy managementStrategy;
     private volatile ManagementMBeanAssembler managementMBeanAssembler;
     private volatile RestRegistryFactory restRegistryFactory;
@@ -4366,6 +4368,21 @@ public abstract class AbstractCamelContext extends BaseService
         this.healthCheckResolver = doAddService(healthCheckResolver);
     }
 
+    public DevConsoleResolver getDevConsoleResolver() {
+        if (devConsoleResolver == null) {
+            synchronized (lock) {
+                if (devConsoleResolver == null) {
+                    setDevConsoleResolver(createDevConsoleResolver());
+                }
+            }
+        }
+        return devConsoleResolver;
+    }
+
+    public void setDevConsoleResolver(DevConsoleResolver devConsoleResolver) {
+        this.devConsoleResolver = devConsoleResolver;
+    }
+
     @Override
     public ShutdownStrategy getShutdownStrategy() {
         if (shutdownStrategy == null) {
@@ -5063,6 +5080,8 @@ public abstract class AbstractCamelContext extends BaseService
     protected abstract DataFormatResolver createDataFormatResolver();
 
     protected abstract HealthCheckResolver createHealthCheckResolver();
+
+    protected abstract DevConsoleResolver createDevConsoleResolver();
 
     protected abstract MessageHistoryFactory createMessageHistoryFactory();
 

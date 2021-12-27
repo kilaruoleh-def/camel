@@ -62,6 +62,7 @@ import org.apache.camel.StartupSummaryLevel;
 import org.apache.camel.TypeConverter;
 import org.apache.camel.ValueHolder;
 import org.apache.camel.catalog.RuntimeCamelCatalog;
+import org.apache.camel.console.DevConsoleResolver;
 import org.apache.camel.health.HealthCheckResolver;
 import org.apache.camel.impl.converter.CoreTypeConverterRegistry;
 import org.apache.camel.impl.engine.DefaultComponentResolver;
@@ -167,6 +168,7 @@ public class LightweightRuntimeCamelContext implements ExtendedCamelContext, Cat
     private final LanguageResolver languageResolver;
     private final DataFormatResolver dataFormatResolver;
     private final HealthCheckResolver healthCheckResolver;
+    private final DevConsoleResolver devConsoleResolver;
     private final UuidGenerator uuidGenerator;
     private final EndpointRegistry<? extends ValueHolder<String>> endpoints;
     private final Map<String, Component> components;
@@ -217,6 +219,7 @@ public class LightweightRuntimeCamelContext implements ExtendedCamelContext, Cat
         languageResolver = context.adapt(ExtendedCamelContext.class).getLanguageResolver();
         dataFormatResolver = context.adapt(ExtendedCamelContext.class).getDataFormatResolver();
         healthCheckResolver = context.adapt(ExtendedCamelContext.class).getHealthCheckResolver();
+        devConsoleResolver = context.adapt(ExtendedCamelContext.class).getDevConsoleResolver();
         endpoints = context.getEndpointRegistry();
         components = context.getComponentNames().stream().collect(Collectors.toMap(s -> s, context::hasComponent));
         languages = context.getLanguageNames().stream().collect(Collectors.toMap(s -> s, context::resolveLanguage));
@@ -567,6 +570,16 @@ public class LightweightRuntimeCamelContext implements ExtendedCamelContext, Cat
 
     @Override
     public void setHealthCheckResolver(HealthCheckResolver healthCheckResolver) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public DevConsoleResolver getDevConsoleResolver() {
+        return devConsoleResolver;
+    }
+
+    @Override
+    public void setDevConsoleResolver(DevConsoleResolver devConsoleResolver) {
         throw new UnsupportedOperationException();
     }
 

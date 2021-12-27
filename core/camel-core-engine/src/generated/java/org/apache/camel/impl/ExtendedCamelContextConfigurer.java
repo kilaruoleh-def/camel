@@ -61,6 +61,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": target.setDeferServiceFactory(property(camelContext, org.apache.camel.spi.DeferServiceFactory.class, value)); return true;
         case "delayer":
         case "Delayer": target.setDelayer(property(camelContext, java.lang.Long.class, value)); return true;
+        case "devconsoleresolver":
+        case "DevConsoleResolver": target.setDevConsoleResolver(property(camelContext, org.apache.camel.console.DevConsoleResolver.class, value)); return true;
         case "dumproutes":
         case "DumpRoutes": target.setDumpRoutes(property(camelContext, java.lang.Boolean.class, value)); return true;
         case "errorhandlerfactory":
@@ -244,6 +246,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": return org.apache.camel.spi.DeferServiceFactory.class;
         case "delayer":
         case "Delayer": return java.lang.Long.class;
+        case "devconsoleresolver":
+        case "DevConsoleResolver": return org.apache.camel.console.DevConsoleResolver.class;
         case "dumproutes":
         case "DumpRoutes": return java.lang.Boolean.class;
         case "errorhandlerfactory":
@@ -428,6 +432,8 @@ public class ExtendedCamelContextConfigurer extends org.apache.camel.support.com
         case "DeferServiceFactory": return target.getDeferServiceFactory();
         case "delayer":
         case "Delayer": return target.getDelayer();
+        case "devconsoleresolver":
+        case "DevConsoleResolver": return target.getDevConsoleResolver();
         case "dumproutes":
         case "DumpRoutes": return target.isDumpRoutes();
         case "errorhandlerfactory":
