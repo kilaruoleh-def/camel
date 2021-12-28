@@ -28,6 +28,7 @@ import org.apache.camel.ExtendedCamelContext;
 import org.apache.camel.console.DevConsole;
 import org.apache.camel.console.DevConsoleRegistry;
 import org.apache.camel.console.DevConsoleResolver;
+import org.apache.camel.support.service.ServiceHelper;
 import org.apache.camel.support.service.ServiceSupport;
 import org.apache.camel.util.StopWatch;
 import org.apache.camel.util.TimeUtils;
@@ -90,10 +91,23 @@ public class DefaultDevConsoleRegistry extends ServiceSupport implements DevCons
 
     @Override
     protected void doInit() throws Exception {
-        super.doInit();
-
         for (DevConsole console : consoles) {
             CamelContextAware.trySetCamelContext(console, camelContext);
+            ServiceHelper.initService(console);
+        }
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        for (DevConsole console : consoles) {
+            ServiceHelper.startService(console);
+        }
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        for (DevConsole console : consoles) {
+            ServiceHelper.stopService(console);
         }
     }
 

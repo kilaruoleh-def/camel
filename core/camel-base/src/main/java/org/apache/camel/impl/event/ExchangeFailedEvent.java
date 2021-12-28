@@ -35,9 +35,9 @@ public class ExchangeFailedEvent extends AbstractExchangeEvent implements CamelE
     public String toString() {
         Exception cause = getExchange().getException();
         if (cause != null) {
-            return getExchange().getExchangeId() + " exchange failure: " + getExchange() + " cause " + cause;
+            return getExchange().getExchangeId() + ": Failed exchange due to " + cause.getMessage();
         } else {
-            return getExchange().getExchangeId() + " exchange failure: " + getExchange();
+            return getExchange().getExchangeId() + ": Failed exchange";
         }
     }
 

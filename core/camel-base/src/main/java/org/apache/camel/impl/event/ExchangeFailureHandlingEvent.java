@@ -55,11 +55,9 @@ public class ExchangeFailureHandlingEvent extends AbstractExchangeEvent implemen
     public String toString() {
         if (isDeadLetterChannel()) {
             String uri = URISupport.sanitizeUri(deadLetterUri);
-            return getExchange().getExchangeId() + " exchange failed: " + getExchange()
-                   + " but is being handled by dead letter channel: " + uri;
+            return getExchange().getExchangeId() + ": Failed and will be handled by dead letter channel: " + uri;
         } else {
-            return getExchange().getExchangeId() + " exchange failed: " + getExchange()
-                   + " but is being processed by failure processor: " + failureHandler;
+            return getExchange().getExchangeId() + ": Failed and will be handled by error handler";
         }
     }
 }

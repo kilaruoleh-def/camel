@@ -38,10 +38,9 @@ public class ExchangeRedeliveryEvent extends AbstractExchangeEvent implements Ca
     public String toString() {
         Exception cause = getExchange().getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
         if (cause != null) {
-            return getExchange().getExchangeId() + " exchange redelivery: " + getExchange() + " attempt " + attempt + " cause "
-                   + cause;
+            return getExchange().getExchangeId() + ": Redelivery attempt: " + attempt + " caused by: " + cause.getMessage();
         } else {
-            return getExchange().getExchangeId() + " exchange redelivery: " + getExchange() + " attempt " + attempt;
+            return getExchange().getExchangeId() + ": Redelivery attempt: " + attempt;
         }
     }
 

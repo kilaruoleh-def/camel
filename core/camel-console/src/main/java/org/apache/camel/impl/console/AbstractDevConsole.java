@@ -21,11 +21,12 @@ import java.util.Map;
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.console.DevConsole;
+import org.apache.camel.support.service.ServiceSupport;
 
 /**
  * Base implementation for {@link DevConsole}.
  */
-public abstract class AbstractDevConsole implements DevConsole, CamelContextAware {
+public abstract class AbstractDevConsole extends ServiceSupport implements DevConsole, CamelContextAware {
 
     private CamelContext camelContext;
     private final Object lock;
