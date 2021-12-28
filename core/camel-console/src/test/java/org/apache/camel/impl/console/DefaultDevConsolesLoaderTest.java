@@ -29,7 +29,7 @@ public class DefaultDevConsolesLoaderTest extends ContextTestSupport {
     public void testLoader() throws Exception {
         DefaultDevConsolesLoader loader = new DefaultDevConsolesLoader(context);
         Collection<DevConsole> col = loader.loadDevConsoles();
-        Assertions.assertEquals(1, col.size());
+        Assertions.assertEquals(2, col.size());
 
         DevConsole con = col.iterator().next();
         Assertions.assertNotNull(con);
