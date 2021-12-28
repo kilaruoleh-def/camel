@@ -17,8 +17,9 @@
 package org.apache.camel.impl.console;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.apache.camel.CamelContext;
@@ -55,7 +56,8 @@ public class DefaultDevConsoleRegistry extends ServiceSupport implements DevCons
     }
 
     public DefaultDevConsoleRegistry(CamelContext camelContext) {
-        this.consoles = new CopyOnWriteArraySet<>();
+        // sort by id
+        this.consoles = new TreeSet<>(Comparator.comparing(DevConsole::getId));
         setCamelContext(camelContext);
     }
 
