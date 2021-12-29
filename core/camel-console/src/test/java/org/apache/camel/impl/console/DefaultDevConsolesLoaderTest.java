@@ -29,16 +29,6 @@ public class DefaultDevConsolesLoaderTest extends ContextTestSupport {
     public void testLoader() throws Exception {
         DefaultDevConsolesLoader loader = new DefaultDevConsolesLoader(context);
         Collection<DevConsole> col = loader.loadDevConsoles();
-        Assertions.assertEquals(2, col.size());
-
-        DevConsole con = col.iterator().next();
-        Assertions.assertNotNull(con);
-        Assertions.assertEquals("camel", con.getGroup());
-        Assertions.assertEquals("context", con.getId());
-
-        String out = (String) con.call(DevConsole.MediaType.TEXT);
-        Assertions.assertNotNull(out);
-        log.info(out);
-        Assertions.assertTrue(out.contains(context.getName()));
+        Assertions.assertEquals(3, col.size());
     }
 }
