@@ -21,29 +21,48 @@ import java.util.Map;
 import java.util.Queue;
 
 import org.apache.camel.spi.CamelEvent;
+import org.apache.camel.spi.Configurer;
 import org.apache.camel.spi.annotations.DevConsole;
 import org.apache.camel.support.EventNotifierSupport;
 
 @DevConsole("event")
+@Configurer(bootstrap = true)
 public class EventConsole extends AbstractDevConsole {
 
     private int capacity = 25;
 
-    private final Queue<CamelEvent> events = new ArrayDeque<>(capacity);
-    private final Queue<CamelEvent.ExchangeEvent> exchangeEvents = new ArrayDeque<>(capacity);
+    private Queue<CamelEvent> events;
+    private Queue<CamelEvent.ExchangeEvent> exchangeEvents;
     private final ConsoleEventNotifier listener = new ConsoleEventNotifier();
 
     public EventConsole() {
         super("camel", "event");
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    /**
+     * Shows last number of events.
+     */
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
     @Override
     protected void doInit() throws Exception {
+        this.events = new ArrayDeque<>(capacity);
+        this.exchangeEvents = new ArrayDeque<>(capacity);
+    }
+
+    @Override
+    protected void doStart() throws Exception {
         getCamelContext().getManagementStrategy().addEventNotifier(listener);
     }
 
     @Override
-    protected void doShutdown() throws Exception {
+    protected void doStop() throws Exception {
         getCamelContext().getManagementStrategy().removeEventNotifier(listener);
         events.clear();
     }

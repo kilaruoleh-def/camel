@@ -120,6 +120,9 @@ public class DefaultDevConsoleRegistry extends ServiceSupport implements DevCons
         if (answer == null) {
             DevConsoleResolver resolver = camelContext.adapt(ExtendedCamelContext.class).getDevConsoleResolver();
             answer = resolver.resolveDevConsole(id);
+            if (answer != null) {
+                register(answer);
+            }
         }
 
         return answer;

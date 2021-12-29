@@ -60,7 +60,7 @@ public interface DevConsoleRegistry extends CamelContextAware, StaticService, Id
      *
      * @return either {@link DevConsole}, or <tt>null</tt> if none found.
      */
-    Object resolveById(String id);
+    DevConsole resolveById(String id);
 
     /**
      * Registers a {@link DevConsole}.
