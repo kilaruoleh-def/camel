@@ -43,6 +43,16 @@ public interface DevConsole {
     String getId();
 
     /**
+     * Display name of this console.
+     */
+    String getDisplayName();
+
+    /**
+     * Short description of this console.
+     */
+    String getDescription();
+
+    /**
      * Whether this console supports the given media type.
      *
      * @param  mediaType the media type

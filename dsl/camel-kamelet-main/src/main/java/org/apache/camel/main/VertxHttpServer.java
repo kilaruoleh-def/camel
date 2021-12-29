@@ -137,6 +137,7 @@ public final class VertxHttpServer {
         Route dev = router.route("/dev");
         dev.method(HttpMethod.GET);
         dev.handler(router.bodyHandler());
+        dev.produces("text/plain");
         dev.handler(new Handler<RoutingContext>() {
             @Override
             public void handle(RoutingContext ctx) {
@@ -147,6 +148,8 @@ public final class VertxHttpServer {
                         if (c.supportMediaType(DevConsole.MediaType.TEXT)) {
                             String text = (String) c.call(DevConsole.MediaType.TEXT);
                             if (text != null) {
+                                sb.append(c.getDisplayName()).append(":");
+                                sb.append("\n\n");
                                 sb.append(text);
                                 sb.append("\n\n");
                             }

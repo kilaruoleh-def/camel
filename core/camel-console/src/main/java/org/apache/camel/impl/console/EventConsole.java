@@ -22,6 +22,7 @@ import java.util.Queue;
 
 import org.apache.camel.spi.CamelEvent;
 import org.apache.camel.spi.Configurer;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.annotations.DevConsole;
 import org.apache.camel.support.EventNotifierSupport;
 
@@ -29,6 +30,7 @@ import org.apache.camel.support.EventNotifierSupport;
 @Configurer(bootstrap = true)
 public class EventConsole extends AbstractDevConsole {
 
+    @Metadata(defaultValue = "25", description = "Maximum capacity of last number of events to capture")
     private int capacity = 25;
 
     private Queue<CamelEvent> events;
@@ -36,16 +38,13 @@ public class EventConsole extends AbstractDevConsole {
     private final ConsoleEventNotifier listener = new ConsoleEventNotifier();
 
     public EventConsole() {
-        super("camel", "event");
+        super("camel", "event", "Camel Events", "The most recent Camel events");
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    /**
-     * Shows last number of events.
-     */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }

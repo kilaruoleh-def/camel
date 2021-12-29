@@ -32,11 +32,15 @@ public abstract class AbstractDevConsole extends ServiceSupport implements DevCo
     private final Object lock;
     private final String group;
     private final String id;
+    private final String displayName;
+    private final String description;
 
-    public AbstractDevConsole(String group, String id) {
+    public AbstractDevConsole(String group, String id, String displayName, String description) {
         this.lock = new Object();
         this.group = group;
         this.id = id;
+        this.displayName = displayName;
+        this.description = description;
     }
 
     @Override
@@ -62,6 +66,16 @@ public abstract class AbstractDevConsole extends ServiceSupport implements DevCo
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override

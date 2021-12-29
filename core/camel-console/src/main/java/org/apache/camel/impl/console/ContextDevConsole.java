@@ -26,7 +26,7 @@ import org.apache.camel.spi.annotations.DevConsole;
 public class ContextDevConsole extends AbstractDevConsole {
 
     public ContextDevConsole() {
-        super("camel", "context");
+        super("camel", "context", "CamelContext", "Overall information about the CamelContext");
     }
 
     @Override
@@ -37,6 +37,8 @@ public class ContextDevConsole extends AbstractDevConsole {
         sb.append(String.format("Apache Camel %s (%s) uptime %s", getCamelContext().getVersion(), getCamelContext().getName(),
                 getCamelContext().getUptime()));
         sb.append("\n");
+
+        // TODO: number of messages should maybe be in another console
         ManagedCamelContext mcc = getCamelContext().getExtension(ManagedCamelContext.class);
         if (mcc != null) {
             ManagedCamelContextMBean mb = mcc.getManagedCamelContext();
