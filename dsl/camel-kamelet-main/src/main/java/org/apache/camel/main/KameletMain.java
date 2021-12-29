@@ -176,6 +176,7 @@ public class KameletMain extends MainCommandLineSupport {
             configure().withDevConsoleEnabled(true);
             VertxHttpServer.registerConsole(answer);
         }
+        configure().withLoadHealthChecks(true);
 
         if (download) {
             try {

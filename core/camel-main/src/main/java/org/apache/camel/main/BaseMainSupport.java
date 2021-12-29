@@ -831,7 +831,8 @@ public abstract class BaseMainSupport extends BaseService {
             MainSupportModelConfigurer.setThreadPoolProperties(camelContext, mainConfigurationProperties, threadPoolProperties,
                     mainConfigurationProperties.isAutoConfigurationFailFast(), autoConfiguredProperties);
         }
-        if (!healthProperties.isEmpty() || mainConfigurationProperties.hasHealthCheckConfiguration()) {
+        boolean hc = mainConfigurationProperties.health().getEnabled() != null; // health-check is enabled by default
+        if (hc || !healthProperties.isEmpty() || mainConfigurationProperties.hasHealthCheckConfiguration()) {
             LOG.debug("Auto-configuring HealthCheck from loaded properties: {}", healthProperties.size());
             setHealthCheckProperties(camelContext, healthProperties, mainConfigurationProperties.isAutoConfigurationFailFast(),
                     autoConfiguredProperties);

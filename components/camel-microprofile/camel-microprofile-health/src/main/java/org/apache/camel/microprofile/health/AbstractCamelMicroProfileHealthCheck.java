@@ -60,8 +60,8 @@ public abstract class AbstractCamelMicroProfileHealthCheck implements HealthChec
                 Map<String, Object> details = result.getDetails();
                 boolean enabled = true;
 
-                if (details.containsKey(AbstractHealthCheck.CHECK_ENABLED)) {
-                    enabled = (boolean) details.get(AbstractHealthCheck.CHECK_ENABLED);
+                if (details.containsKey(org.apache.camel.health.HealthCheck.CHECK_ENABLED)) {
+                    enabled = (boolean) details.get(org.apache.camel.health.HealthCheck.CHECK_ENABLED);
                 }
 
                 if (enabled) {

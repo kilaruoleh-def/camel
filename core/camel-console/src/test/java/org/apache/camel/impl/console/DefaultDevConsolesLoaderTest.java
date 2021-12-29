@@ -29,6 +29,6 @@ public class DefaultDevConsolesLoaderTest extends ContextTestSupport {
     public void testLoader() throws Exception {
         DefaultDevConsolesLoader loader = new DefaultDevConsolesLoader(context);
         Collection<DevConsole> col = loader.loadDevConsoles();
-        Assertions.assertEquals(3, col.size());
+        Assertions.assertTrue(col.size() > 3);
     }
 }
