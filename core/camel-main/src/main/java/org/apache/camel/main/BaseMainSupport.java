@@ -831,6 +831,7 @@ public abstract class BaseMainSupport extends BaseService {
             MainSupportModelConfigurer.setThreadPoolProperties(camelContext, mainConfigurationProperties, threadPoolProperties,
                     mainConfigurationProperties.isAutoConfigurationFailFast(), autoConfiguredProperties);
         }
+        // need to let camel-main setup health-check using its convention over configuration
         boolean hc = mainConfigurationProperties.health().getEnabled() != null; // health-check is enabled by default
         if (hc || !healthProperties.isEmpty() || mainConfigurationProperties.hasHealthCheckConfiguration()) {
             LOG.debug("Auto-configuring HealthCheck from loaded properties: {}", healthProperties.size());
