@@ -33,7 +33,7 @@ public class JvmDevConsole extends AbstractDevConsole {
     private boolean showClasspath = true;
 
     public JvmDevConsole() {
-        super("camel", "jvm", "JVM", "Displays JVM information");
+        super("jvm", "jvm", "JVM", "Displays JVM information");
     }
 
     public boolean isShowClasspath() {
