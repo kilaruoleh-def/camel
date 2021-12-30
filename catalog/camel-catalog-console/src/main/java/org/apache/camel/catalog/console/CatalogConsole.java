@@ -22,9 +22,7 @@ import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
 import org.apache.camel.impl.console.AbstractDevConsole;
 import org.apache.camel.spi.annotations.DevConsole;
-import org.apache.camel.tooling.model.ComponentModel;
-import org.apache.camel.tooling.model.DataFormatModel;
-import org.apache.camel.tooling.model.LanguageModel;
+import org.apache.camel.tooling.model.ArtifactModel;
 
 @DevConsole("catalog")
 public class CatalogConsole extends AbstractDevConsole {
@@ -40,43 +38,24 @@ public class CatalogConsole extends AbstractDevConsole {
         // only text is supported
         StringBuilder sb = new StringBuilder();
 
-        // components
-        for (String name : getCamelContext().getComponentNames()) {
-            ComponentModel model = catalog.componentModel(name);
-            if (model != null) {
-                sb.append(String.format("\n    %s (%s)", name, model.getSupportLevel()));
-                if (model.isDeprecated()) {
-                    sb.append(" (deprecated)");
-                }
-            } else {
-                sb.append("\n    ").append(name);
-            }
-        }
-        // data formats
-        for (String name : getCamelContext().getDataFormatNames()) {
-            DataFormatModel model = catalog.dataFormatModel(name);
-            if (model != null) {
-                sb.append(String.format("\n    %s (%s)", name, model.getSupportLevel()));
-                if (model.isDeprecated()) {
-                    sb.append(" (deprecated)");
-                }
-            } else {
-                sb.append("\n    ").append(name);
-            }
-        }
-        // languages
-        for (String name : getCamelContext().getLanguageNames()) {
-            LanguageModel model = catalog.languageModel(name);
-            if (model != null) {
-                sb.append(String.format("\n    %s (%s)", name, model.getSupportLevel()));
-                if (model.isDeprecated()) {
-                    sb.append(" (deprecated)");
-                }
-            } else {
-                sb.append("\n    ").append(name);
-            }
-        }
+        sb.append("\nComponents:\n");
+        getCamelContext().getComponentNames().forEach(n -> appendModel(catalog.componentModel(n), sb));
+        sb.append("\n\nLanguages:\n");
+        getCamelContext().getLanguageNames().forEach(n -> appendModel(catalog.languageModel(n), sb));
+        sb.append("\n\nData Formats:\n");
+        getCamelContext().getDataFormatNames().forEach(n -> appendModel(catalog.dataFormatModel(n), sb));
 
         return sb.toString();
+    }
+
+    private static void appendModel(ArtifactModel<?> model, StringBuilder sb) {
+        if (model != null) {
+            String level = model.getSupportLevel().toString();
+            if (model.isDeprecated()) {
+                level += "-deprecated";
+            }
+            sb.append(String.format("\n    %s %s %s %s %s", model.getTitle(), model.getArtifactId(), level,
+                    model.getFirstVersionShort(), model.getDescription()));
+        }
     }
 }
