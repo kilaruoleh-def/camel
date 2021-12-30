@@ -23,10 +23,12 @@ import org.apache.camel.catalog.DefaultCamelCatalog;
 import org.apache.camel.impl.console.AbstractDevConsole;
 import org.apache.camel.spi.annotations.DevConsole;
 import org.apache.camel.tooling.model.ArtifactModel;
+import org.apache.camel.tooling.model.OtherModel;
 
 @DevConsole("catalog")
 public class CatalogConsole extends AbstractDevConsole {
 
+    private static final String CP = System.getProperty("java.class.path");
     private final CamelCatalog catalog = new DefaultCamelCatalog(true);
 
     public CatalogConsole() {
@@ -45,7 +47,32 @@ public class CatalogConsole extends AbstractDevConsole {
         sb.append("\n\nData Formats:\n");
         getCamelContext().getDataFormatNames().forEach(n -> appendModel(catalog.dataFormatModel(n), sb));
 
+        // misc is harder to find as we need to find them via classpath
+        sb.append("\n\nMiscellaneous Components:\n");
+        String[] cp = CP.split("[:|;]");
+        String suffix = "-" + getCamelContext().getVersion() + ".jar";
+        for (String c : cp) {
+            if (c.endsWith(suffix)) {
+                int pos = Math.max(c.lastIndexOf("/"), c.lastIndexOf("\\"));
+                if (pos > 0) {
+                    c = c.substring(pos + 1, c.length() - suffix.length());
+                    appendModel(findOtherModel(c), sb);
+                }
+            }
+        }
+
         return sb.toString();
+    }
+
+    private ArtifactModel findOtherModel(String artifactId) {
+        // is it a mist component
+        for (String name : catalog.findOtherNames()) {
+            OtherModel model = catalog.otherModel(name);
+            if (model != null && model.getArtifactId().equals(artifactId)) {
+                return model;
+            }
+        }
+        return null;
     }
 
     private static void appendModel(ArtifactModel<?> model, StringBuilder sb) {
