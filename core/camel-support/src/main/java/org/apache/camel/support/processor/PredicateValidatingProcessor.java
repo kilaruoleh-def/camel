@@ -20,6 +20,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.Processor;
 import org.apache.camel.Traceable;
+import org.apache.camel.spi.PredicateExceptionFactory;
 import org.apache.camel.support.service.ServiceSupport;
 import org.apache.camel.util.ObjectHelper;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public class PredicateValidatingProcessor extends ServiceSupport implements Proc
     private static final Logger LOG = LoggerFactory.getLogger(PredicateValidatingProcessor.class);
 
     private final Predicate predicate;
+    private PredicateExceptionFactory predicateExceptionFactory;
 
     public PredicateValidatingProcessor(Predicate predicate) {
         ObjectHelper.notNull(predicate, "predicate", this);
@@ -48,12 +50,33 @@ public class PredicateValidatingProcessor extends ServiceSupport implements Proc
         }
 
         if (!matches) {
-            throw new PredicateValidationException(exchange, predicate);
+            Exception cause = null;
+            if (predicateExceptionFactory != null) {
+                cause = predicateExceptionFactory.newPredicateException(exchange, predicate);
+            }
+            if (cause == null) {
+                cause = new PredicateValidationException(exchange, predicate);
+            }
+            throw cause;
         }
     }
 
     public Predicate getPredicate() {
         return predicate;
+    }
+
+    /**
+     * To use a custom factory for creating the exception to throw if predicate does not match
+     */
+    public PredicateExceptionFactory getPredicateExceptionFactory() {
+        return predicateExceptionFactory;
+    }
+
+    /**
+     * To use a custom factory for creating the exception to throw if predicate does not match
+     */
+    public void setPredicateExceptionFactory(PredicateExceptionFactory predicateExceptionFactory) {
+        this.predicateExceptionFactory = predicateExceptionFactory;
     }
 
     @Override
